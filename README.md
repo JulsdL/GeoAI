@@ -96,3 +96,4 @@ If this repository helped your research, please cite `HLS foundation` in your pu
     year            = {2023}
 }
 ```
+# GeoAI
