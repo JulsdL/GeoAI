@@ -18,8 +18,8 @@ patch_size = 16
 embed_dim = 768
 num_heads = 8
 tubelet_size = 1
-max_epochs = 80
-eval_epoch_interval = 5
+max_epochs = 1  # Set to 1 for testing your configuration or 80 (default) for training the model
+eval_epoch_interval = 1  # Set to 1 for testing your configuration or 5 (default) for training the model
 
 loss_weights_multi = [
     0.386375, 0.661126, 0.548184, 0.640482, 0.876862, 0.925186, 3.249462,
@@ -44,7 +44,8 @@ dataset_type = 'GeospatialDataset'
 data_root = './dataset/training_chips/'
 
 splits = dict(
-    train='./data_splits/multi_temporal_crop_classification/training_data.txt',
+    train=
+    './data_splits/multi_temporal_crop_classification/small_training_data.txt',  # Set small_training_data.txt for testing your configuration or training_data.txt (default) for training the model
     val='./data_splits/multi_temporal_crop_classification/validation_data.txt',
     test=
     './data_splits/multi_temporal_crop_classification/validation_data.txt'  # Assuming validation data is also used for testing; update as necessary
@@ -122,38 +123,41 @@ CLASSES = ('Natural Vegetation', 'Forest', 'Corn', 'Soybeans', 'Wetlands',
 
 dataset = 'GeospatialDataset'
 
-data = dict(samples_per_gpu=8,
-            workers_per_gpu=4,
-            train=dict(type=dataset,
-                       CLASSES=CLASSES,
-                       reduce_zero_label=True,
-                       data_root=data_root,
-                       img_dir='training_chips',
-                       ann_dir='training_chips',
-                       pipeline=train_pipeline,
-                       img_suffix='_merged.tif',
-                       seg_map_suffix='.mask.tif',
-                       split=splits['train']),
-            val=dict(type=dataset,
-                     CLASSES=CLASSES,
-                     reduce_zero_label=True,
-                     data_root=data_root,
-                     img_dir='validation_chips',
-                     ann_dir='validation_chips',
-                     pipeline=test_pipeline,
-                     img_suffix='_merged.tif',
-                     seg_map_suffix='.mask.tif',
-                     split=splits['val']),
-            test=dict(type=dataset,
-                      CLASSES=CLASSES,
-                      reduce_zero_label=True,
-                      data_root=data_root,
-                      img_dir='validation_chips',
-                      ann_dir='validation_chips',
-                      pipeline=test_pipeline,
-                      img_suffix='_merged.tif',
-                      seg_map_suffix='.mask.tif',
-                      split=splits['val']))
+data = dict(
+    samples_per_gpu=
+    2,  # Set to 2 for testing your configuration or 8 (default) for training the model
+    workers_per_gpu=
+    1,  # Set to 1 for testing your configuration or 4 (default) for training the model
+    train=dict(type=dataset,
+               CLASSES=CLASSES,
+               reduce_zero_label=True,
+               data_root=data_root,
+               img_dir='training_chips',
+               ann_dir='training_chips',
+               pipeline=train_pipeline,
+               img_suffix='_merged.tif',
+               seg_map_suffix='.mask.tif',
+               split=splits['train']),
+    val=dict(type=dataset,
+             CLASSES=CLASSES,
+             reduce_zero_label=True,
+             data_root=data_root,
+             img_dir='validation_chips',
+             ann_dir='validation_chips',
+             pipeline=test_pipeline,
+             img_suffix='_merged.tif',
+             seg_map_suffix='.mask.tif',
+             split=splits['val']),
+    test=dict(type=dataset,
+              CLASSES=CLASSES,
+              reduce_zero_label=True,
+              data_root=data_root,
+              img_dir='validation_chips',
+              ann_dir='validation_chips',
+              pipeline=test_pipeline,
+              img_suffix='_merged.tif',
+              seg_map_suffix='.mask.tif',
+              split=splits['val']))
 
 optimizer = dict(type='Adam',
                  lr=1.5e-05,
